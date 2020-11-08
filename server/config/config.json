@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "andreyka",
+    "password": "zaebatAnd",
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "andreyka",
+    "password": "zaebatAnd",
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "andreyka",
+    "password": "zaebatAnd",
+    "database": "chat",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
