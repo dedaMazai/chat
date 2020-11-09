@@ -6,7 +6,6 @@
   display: flex;
   justify-content: center;
   color: #ff9b9b;
-  font-family: 'Roboto';
   font-weight: 600;
 }
 
@@ -115,7 +114,6 @@
   border: 2px solid #48a501;
   border-radius: 5px;
   margin-top: 5px;
-  font-family: "Roboto";
   font-weight: bold;
   font-size: 1.1em;
   color: rgb(255, 255, 255);

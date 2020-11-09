@@ -5,7 +5,7 @@ import {AuthContext} from '../context/AuthContext';
 import foto from './foto.jpg';
 
 import './auth.css';
-function Auth ()  {
+function Auth () {
     const auth = useContext(AuthContext);
     const {loading, request, error} = useHttp();
     const [form, setForm] = useState({
