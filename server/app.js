@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
 });
 
 
-app.listen(4000, (err) => {
+server.listen(4000, (err) => {
     if (err) {
         throw Error(err);
     }

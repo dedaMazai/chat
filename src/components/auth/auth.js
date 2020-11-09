@@ -16,7 +16,7 @@ function Auth () {
 
     useEffect(() => {
         setForm({ ...form, massage: error })
-    }, [])
+    }, [error, form])
     const previewFile = () => {
         var file = ref.current.files[0],
             reader = new FileReader();
