@@ -9,14 +9,10 @@ function Auth () {
     const auth = useContext(AuthContext);
     const {loading, request, error} = useHttp();
     const [form, setForm] = useState({
-        num: 0, email: '', password: '', login: '', massage: ''
+        num: 0, email: '', password: '', login: '', massage: '', cod: '', info: '', posit: '', tel: ''
     });
     const [img, setImg] = useState({img: foto});
     let ref = React.createRef();
-
-    useEffect(() => {
-        setForm({ ...form, massage: error })
-    }, [error, form])
     const previewFile = () => {
         var file = ref.current.files[0],
             reader = new FileReader();
@@ -51,7 +47,8 @@ function Auth () {
 
     const loginHandler = async () => {
         try {
-          const data = await request('/api/login', 'POST', {...form});
+          const data = await request('/api/login', 'POST', (form.email, form.password));
+          console.log(data)
           auth.login(data.token, data.id)
           setForm({ ...form, massage: data.message })
         } catch (e) {
@@ -67,7 +64,7 @@ function Auth () {
                     <form>
                         <input  type="text"
                                 className="inputLogin"
-                                name="login"
+                                name="email"
                                 placeholder="Login"
                                 onChange={changeHandler}/>
                         <input  type="password"
@@ -121,16 +118,17 @@ function Auth () {
                                     onChange={changeHandler}/>
                             <input  type="password"
                                     className="inputPassword"
-                                    placeholder="Повторите пароль"
-                                    onChange={changeHandler}/>
+                                    placeholder="Повторите пароль"/>
                             <input  type="text"
                                     className="inputPassword"
+                                    name="cod"
                                     placeholder="Код регистрации"
                                     onChange={changeHandler}/>
                         </div>
                         <div>
                             <input  type="text"
                                     className="inputLogin"
+                                    name="info"
                                     placeholder="Ф.И.О."
                                     onChange={changeHandler}/>
                             <input  type="text"
@@ -140,10 +138,12 @@ function Auth () {
                                     onChange={changeHandler}/>
                             <input  type="tel"
                                     className="inputPassword"
+                                    name="tel"
                                     placeholder="Телефон"
                                     onChange={changeHandler}/>
                             <input  type="text"
                                     className="inputPassword"
+                                    name="posit"
                                     placeholder="Должность"
                                     onChange={changeHandler}/>
                             <input  className="buttonLogin"

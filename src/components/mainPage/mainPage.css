@@ -209,6 +209,7 @@
     background: #88d1b6;
     font-weight: 600;
     outline: 0;
+    cursor: pointer;
 }
 
 .smsPageFooter button:active {
