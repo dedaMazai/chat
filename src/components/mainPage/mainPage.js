@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {AuthContext} from '../context/AuthContext';
 
 import './mainPage.css';
 
 import img from './foto.jpg';
 function MainPage () {
+    const auth = useContext(AuthContext);
+
+    const exitPage = () => {
+        auth.logout()
+    };
+
     return (
         <>
             <div className="headerPage">
                 <h2>YOUCHAT</h2>
-                <div className="exitPage">
+                <div className="exitPage" onClick={exitPage}>
                     <div className="exitRoundPage">
-                        <p>I</p>
+                        <p>l</p>
                     </div>
                 </div>
             </div>

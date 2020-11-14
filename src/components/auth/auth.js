@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useHttp} from '../../hooks/http.hook';
 import {AuthContext} from '../context/AuthContext';
 
@@ -7,7 +7,7 @@ import foto from './foto.jpg';
 import './auth.css';
 function Auth () {
     const auth = useContext(AuthContext);
-    const {loading, request, error} = useHttp();
+    const {loading, request} = useHttp();
     const [form, setForm] = useState({
         num: 0, email: '', password: '', login: '', massage: '', cod: '', info: '', posit: '', tel: ''
     });
@@ -39,7 +39,7 @@ function Auth () {
     const registerHandler = async () => {
         try {
             const data = await request('/api/signup', 'POST', {...form});
-            setForm({ ...form, massage: data.message })
+            setForm({ ...form, massage: data.message, num: 0})
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
@@ -47,15 +47,13 @@ function Auth () {
 
     const loginHandler = async () => {
         try {
-          const data = await request('/api/login', 'POST', (form.email, form.password));
-          console.log(data)
+          const data = await request('/api/login', 'POST', ({ email: form.email, password: form.password}));
           auth.login(data.token, data.id)
           setForm({ ...form, massage: data.message })
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
     }
-    console.log(form)
 
     if (form.num === 0) {
         return (
@@ -75,7 +73,7 @@ function Auth () {
                         <input  className="buttonLogin"
                                 type="button"
                                 value="Войти"
-                                disabled={loading || form.login === '' || form.password === '' ? true : false}
+                                disabled={loading || form.email === '' || form.password === '' ? true : false}
                                 onClick={loginHandler}/>
                     </form>
                     <h3 className="signup" onClick={() =>authDown(1)}> Зарегистрироваться. </h3>
