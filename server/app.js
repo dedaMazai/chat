@@ -16,6 +16,7 @@ app.use(express.json());
 app.post('/api/signup', userValidator, userController.create);
 app.post('/api/login', loginValidator, userController.login);
 app.post('/api/send',  userController.send);
+app.post('/api/chose',  userController.chose);
 
 
 
