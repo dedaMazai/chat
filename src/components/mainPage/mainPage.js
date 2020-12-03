@@ -1,15 +1,29 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {AuthContext} from '../context/AuthContext';
+import {useHttp} from '../../hooks/http.hook';
 
 import './mainPage.css';
 
 import img from './foto.jpg';
 function MainPage () {
     const auth = useContext(AuthContext);
+    // const {loading, request} = useHttp();
+
+    // const [form, setForm] = useState({
+    //     num: 0, email: '', password: '', login: '', massage: '', cod: '', info: '', posit: '', tel: ''
+    // });
 
     const exitPage = () => {
         auth.logout()
     };
+    // const registerHandler = async () => {
+    //     try {
+    //         const data = await request('/api/signup', 'POST', {...form});
+    //         setForm({ ...form, massage: data.message, num: 0})
+    //     } catch (e) {
+    //         setForm({ ...form, massage: e.message })
+    //     }
+    // }
 
     return (
         <>

@@ -27,6 +27,7 @@ function Auth () {
             setImg({img: foto})
         }
     }
+    console.log(form)
 
     const changeHandler = event => {
         setForm({ ...form, [event.target.name]: event.target.value })
@@ -63,7 +64,7 @@ function Auth () {
                         <input  type="text"
                                 className="inputLogin"
                                 name="email"
-                                placeholder="Login"
+                                placeholder="Email"
                                 onChange={changeHandler}/>
                         <input  type="password"
                                 className="inputPassword"
@@ -107,7 +108,7 @@ function Auth () {
                             <input  type="text"
                                     className="inputLogin"
                                     name="login"
-                                    placeholder="Логин"
+                                    placeholder="Псевдоним"
                                     onChange={changeHandler}/>
                             <input  type="password"
                                     className="inputPassword"
