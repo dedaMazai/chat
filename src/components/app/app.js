@@ -2,7 +2,6 @@ import React from 'react';
 import Routes from '../routes';
 import {useAuth} from '../../hooks/auth.hook';
 import {AuthContext} from '../context/AuthContext';
-import io from 'socket.io-client';
 
 import './app.css';
 

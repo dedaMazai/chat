@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {AuthContext} from '../context/AuthContext';
 import {useHttp} from '../../hooks/http.hook';
 
@@ -7,23 +7,68 @@ import './mainPage.css';
 import img from './foto.jpg';
 function MainPage () {
     const auth = useContext(AuthContext);
-    // const {loading, request} = useHttp();
+    const {loading, request} = useHttp();
 
-    // const [form, setForm] = useState({
-    //     num: 0, email: '', password: '', login: '', massage: '', cod: '', info: '', posit: '', tel: ''
-    // });
+    const [form, setForm] = useState({
+        num: 0,
+        email: '',
+        password: '',
+        logins: [],
+        loginTo: '',
+        smsTake: {},
+        smsSend: {},
+        massage: '',
+        info: '',
+        posit: '',
+        tel: ''
+    });
 
     const exitPage = () => {
-        auth.logout()
+        auth.logout();
     };
-    // const registerHandler = async () => {
-    //     try {
-    //         const data = await request('/api/signup', 'POST', {...form});
-    //         setForm({ ...form, massage: data.message, num: 0})
-    //     } catch (e) {
-    //         setForm({ ...form, massage: e.message })
-    //     }
-    // }
+    const takeAllPerson = async () => {
+        try {
+            const data = await request('/api/all', 'POST');
+            setForm({ ...form, logins: data})
+        } catch (e) {
+            setForm({ ...form, massage: e.message })
+        }
+    }
+
+    const takePerson = async (login) => {
+        try {
+            const data = await request('/api/chose', 'POST', {id : sessionStorage.userId, login});
+            setForm({ ...form,
+                 smsTake: data.smsTake,
+                 smsSend: data.smsSend,
+                 email: data.information.email,
+                 tel: data.information.tel,
+                 posit: data.information.posit,
+                 info: data.information.info,
+                 loginTo: login,});
+        } catch (e) {
+            setForm({ ...form, massage: e.message })
+        }
+    }
+
+    const sendMessage = async (sms) => {
+        try {
+            await request('/api/send', 'POST', {id : sessionStorage.userId, login : form.loginTo, sms});
+        } catch (e) {
+            setForm({ ...form, massage: e.message })
+        }
+    }
+
+    // useEffect(() => {
+    //     takeAllPerson();
+    //     console.log(1);
+    //   });
+
+    // let timerAllPerson = setInterval(() => {
+    //     takeAllPerson();
+    //     takePerson();
+    //     console.log(1)
+    // }, 10000);
 
     return (
         <>
@@ -38,9 +83,11 @@ function MainPage () {
             <div className="bodyPage">
                 <div className="contactPage">
                     <ul>
-                        <li>Михаил Литвин</li>
-                        <li>Виктор Литвин</li>
-                        <li>Андрей Литвин</li>
+                    {form.logins.map(data => (
+                        <li onClick={()=>takePerson(data)}>
+                            {data}
+                        </li>
+                    ))}
                     </ul>
                 </div>
                 <div className="smsPage">
