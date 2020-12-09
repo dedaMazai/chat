@@ -27,7 +27,6 @@ function Auth () {
             setImg({img: foto})
         }
     }
-    console.log(form)
 
     const changeHandler = event => {
         setForm({ ...form, [event.target.name]: event.target.value })

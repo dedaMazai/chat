@@ -60,12 +60,21 @@
 
 .contactPage {
     display: flex;
+    max-height: 590px;
+    min-height: 350px;
+    overflow-y: scroll;
     width: 15%;
     flex-direction: column;
     background-color: #C3F3D6;
     border: 2px solid #B5E7C6;
     border-radius: 10px 0px 0px 10px;
 }
+
+.contactPage::-webkit-scrollbar { width: 0; }
+
+.contactPage { -ms-overflow-style: none; }
+
+.contactPage { overflow: -moz-scrollbars-none; }
 
 .contactPage li {
     cursor: pointer;
@@ -80,6 +89,8 @@
 
 .smsPage {
     display: flex;
+    max-height: 590px;
+    min-height: 350px;
     flex-direction: column;
     background-color: #C9FDEA;
     border-radius: 0px 10px 10px 0px;

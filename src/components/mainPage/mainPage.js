@@ -10,25 +10,26 @@ function MainPage () {
     const {loading, request} = useHttp();
 
     const [form, setForm] = useState({
-        num: 0,
         email: '',
         password: '',
         logins: [],
         loginTo: '',
-        smsTake: {},
-        smsSend: {},
+        smsTake: [],
+        smsSend: [],
         massage: '',
+        smsInput: '',
         info: '',
         posit: '',
         tel: ''
     });
+    const dataLocal = JSON.parse(localStorage.getItem('userData'));
 
     const exitPage = () => {
         auth.logout();
     };
     const takeAllPerson = async () => {
         try {
-            const data = await request('/api/all', 'POST');
+            const data = await request('/api/all', 'POST', {id : dataLocal.userId});
             setForm({ ...form, logins: data})
         } catch (e) {
             setForm({ ...form, massage: e.message })
@@ -37,14 +38,22 @@ function MainPage () {
 
     const takePerson = async (login) => {
         try {
-            const data = await request('/api/chose', 'POST', {id : sessionStorage.userId, login});
+            const person = await request('/api/chose', 'POST', {id : dataLocal.userId, login});
+            let send = [],
+                take = [];
+                person.smsSend.map( function (name) {
+                    send.push(name.sms)
+                });
+                person.smsTake.map( function (name) {
+                    take.push(name.sms)
+                });
             setForm({ ...form,
-                 smsTake: data.smsTake,
-                 smsSend: data.smsSend,
-                 email: data.information.email,
-                 tel: data.information.tel,
-                 posit: data.information.posit,
-                 info: data.information.info,
+                 smsTake: take,
+                 smsSend: send,
+                 email: person.information.email,
+                 tel: person.information.tel,
+                 posit: person.information.posit,
+                 info: person.information.info,
                  loginTo: login,});
         } catch (e) {
             setForm({ ...form, massage: e.message })
@@ -53,22 +62,31 @@ function MainPage () {
 
     const sendMessage = async (sms) => {
         try {
-            await request('/api/send', 'POST', {id : sessionStorage.userId, login : form.loginTo, sms});
+            await request('/api/send', 'POST', {id : dataLocal.userId, login : form.loginTo, sms});
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
     }
 
+    const changeInput = event => {
+        setForm({ ...form, smsInput: event.target.value })
+    };
+
     // useEffect(() => {
+    //     const data = JSON.parse(localStorage.getItem('userData'));
+    //     console.log(data)});
+    //   setInterval(() => {
     //     takeAllPerson();
-    //     console.log(1);
-    //   });
+    //     console.log(1)
+    // }, 5000);
 
     // let timerAllPerson = setInterval(() => {
     //     takeAllPerson();
     //     takePerson();
     //     console.log(1)
     // }, 10000);
+    // takeAllPerson();
+    console.log(form.smsSend);
 
     return (
         <>
@@ -83,50 +101,54 @@ function MainPage () {
             <div className="bodyPage">
                 <div className="contactPage">
                     <ul>
-                    {form.logins.map(data => (
-                        <li onClick={()=>takePerson(data)}>
-                            {data}
-                        </li>
-                    ))}
+                        {form.logins.map(data => (
+                            <li onClick={()=>takePerson(data)}>
+                                {data}
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="smsPage">
                     <div className="smsPageHeader">
-                        <h2>Тамразян Михаил Сергеевич / Директор</h2>
+                        <h2> {form.info} / {form.posit}</h2>
                         <div>
-                            <p>Телефон: 89778231232</p>
-                            <p>Почта: drgswsd@mail.ru</p>
+                            <p>Телефон: {form.tel}</p>
+                            <p>Почта: {form.email}</p>
                         </div>
                     </div>
-                    <div className="smsPageBody">
+                    <div className="smsPageBody" onClick={()=>takeAllPerson()}>
                         <ul>
                             <li className="reserve">
                                 <img src={img} alt="Image preview..."/>
                                 <div>
                                     <div>
-                                        <p>Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет </p>
+                                        {/* <p>{form.smsSend}</p> */}
                                     </div>
                                 </div>
                             </li>
                             <li>
-                                <img src={img} alt="Image preview..."/>
+                                <img src={img} alt="Image preview..." />
                                 <div>
                                     <div>
-                                        <p>Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет Привет </p>
+                                        {/* <p>{form.smsTake}</p> */}
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div className="smsPageFooter">
-                        <input className="smsInput"/>
+                        <input className="smsInput" onChange={changeInput}/>
                         <div id="smsFile">
                             <label>
-                                <input type="file" className="smsFile" id="uploade-file"/>
+                                <input type="file"
+                                className="smsFile"
+                                id="uploade-file"
+                                disabled={form.loginTo === "" || form.loginTo === undefined ? true : false}/>
                                 <span>&#926;</span>
                             </label>
                         </div>
-                        <button>Отправить</button>
+                        <button onClick={()=>sendMessage(form.smsInput)}
+                                disabled={form.loginTo === "" || form.loginTo === undefined ? true : false}>Отправить</button>
                     </div>
                 </div>
             </div>
