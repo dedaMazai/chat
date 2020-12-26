@@ -14,6 +14,7 @@ function MainPage () {
         password: '',
         logins: [],
         loginTo: '',
+        idTake: '',
         smsTake: [],
         smsSend: [],
         massage: '',
@@ -54,6 +55,7 @@ function MainPage () {
                  tel: person.information.tel,
                  posit: person.information.posit,
                  info: person.information.info,
+                 idTake: person.information.id,
                  loginTo: login,});
         } catch (e) {
             setForm({ ...form, massage: e.message })
@@ -62,7 +64,7 @@ function MainPage () {
 
     const sendMessage = async (sms) => {
         try {
-            await request('/api/send', 'POST', {id : dataLocal.userId, login : form.loginTo, sms});
+            await request('/api/send', 'POST', { id : dataLocal.userId, login : form.loginTo, sms });
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
@@ -86,7 +88,7 @@ function MainPage () {
     //     console.log(1)
     // }, 10000);
     // takeAllPerson();
-    console.log(form.smsSend);
+    // console.log(form.smsTake);
 
     return (
         <>
@@ -122,7 +124,7 @@ function MainPage () {
                                 <img src={img} alt="Image preview..."/>
                                 <div>
                                     <div>
-                                        {/* <p>{form.smsSend}</p> */}
+                                        <p>{form.smsSend[0]}</p>
                                     </div>
                                 </div>
                             </li>
@@ -130,7 +132,7 @@ function MainPage () {
                                 <img src={img} alt="Image preview..." />
                                 <div>
                                     <div>
-                                        {/* <p>{form.smsTake}</p> */}
+                                        <p>{form.smsTake[0]}</p>
                                     </div>
                                 </div>
                             </li>
@@ -148,7 +150,7 @@ function MainPage () {
                             </label>
                         </div>
                         <button onClick={()=>sendMessage(form.smsInput)}
-                                disabled={form.loginTo === "" || form.loginTo === undefined ? true : false}>Отправить</button>
+                                disabled={form.loginTo === "" || form.loginTo === undefined || form.smsInput === "" ? true : false}>Отправить</button>
                     </div>
                 </div>
             </div>

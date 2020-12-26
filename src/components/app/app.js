@@ -8,7 +8,6 @@ import './app.css';
 
 function App () {
     const { token, login, logout, userId } = useAuth();
-    // const socket = io();
     const isAuthenticated = !!token;
     return (
         <AuthContext.Provider value={ { token, login, logout, userId, isAuthenticated } }>
