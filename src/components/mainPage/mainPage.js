@@ -8,6 +8,7 @@ import img from './foto.jpg';
 function MainPage () {
     const auth = useContext(AuthContext);
     const {loading, request} = useHttp();
+    const ref = React.createRef();
 
     const [form, setForm] = useState({
         email: '',
@@ -15,8 +16,7 @@ function MainPage () {
         logins: [],
         loginTo: '',
         idTake: '',
-        smsTake: [],
-        smsSend: [],
+        smsAll: [],
         massage: '',
         smsInput: '',
         info: '',
@@ -27,6 +27,7 @@ function MainPage () {
 
     const exitPage = () => {
         auth.logout();
+        delete localStorage.login;
     };
     const takeAllPerson = async () => {
         try {
@@ -40,23 +41,25 @@ function MainPage () {
     const takePerson = async (login) => {
         try {
             const person = await request('/api/chose', 'POST', {id : dataLocal.userId, login});
-            let send = [],
-                take = [];
+            let smsAll = [];
                 person.smsSend.map( function (name) {
-                    send.push(name.sms)
+                    smsAll.push({ "sms" : name.sms, "reverse" : "reverse", "data" : name.data })
                 });
                 person.smsTake.map( function (name) {
-                    take.push(name.sms)
+                    smsAll.push({ "sms" : name.sms, "reverse" : "", "data" : name.data })
                 });
+                smsAll.sort(function(a,b){
+                    return new Date(b.data) - new Date(a.data);
+                }).reverse();
             setForm({ ...form,
-                 smsTake: take,
-                 smsSend: send,
+                 smsAll,
                  email: person.information.email,
                  tel: person.information.tel,
                  posit: person.information.posit,
                  info: person.information.info,
                  idTake: person.information.id,
                  loginTo: login,});
+            localStorage.login = login;
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
@@ -64,7 +67,9 @@ function MainPage () {
 
     const sendMessage = async (sms) => {
         try {
+            ref.current.value = '';
             await request('/api/send', 'POST', { id : dataLocal.userId, login : form.loginTo, sms });
+            await takePerson(localStorage.login);
         } catch (e) {
             setForm({ ...form, massage: e.message })
         }
@@ -112,7 +117,7 @@ function MainPage () {
                 </div>
                 <div className="smsPage">
                     <div className="smsPageHeader">
-                        <h2> {form.info} / {form.posit}</h2>
+                        <h2> {form.info} | {form.posit}</h2>
                         <div>
                             <p>Телефон: {form.tel}</p>
                             <p>Почта: {form.email}</p>
@@ -120,26 +125,20 @@ function MainPage () {
                     </div>
                     <div className="smsPageBody" onClick={()=>takeAllPerson()}>
                         <ul>
-                            <li className="reserve">
-                                <img src={img} alt="Image preview..."/>
-                                <div>
+                            {form.smsAll.map(data => (
+                                <li className = {data.reverse} >
+                                    <img src={img} alt="Image preview..."/>
                                     <div>
-                                        <p>{form.smsSend[0]}</p>
+                                        <div>
+                                            <p>{data.sms}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li>
-                                <img src={img} alt="Image preview..." />
-                                <div>
-                                    <div>
-                                        <p>{form.smsTake[0]}</p>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                     <div className="smsPageFooter">
-                        <input className="smsInput" onChange={changeInput}/>
+                        <input className="smsInput" ref={ref} onChange={changeInput}/>
                         <div id="smsFile">
                             <label>
                                 <input type="file"

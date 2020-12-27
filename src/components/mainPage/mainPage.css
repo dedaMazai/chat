@@ -129,7 +129,7 @@
     margin-bottom: 10px;
 }
 
-.smsPageBody ul li.reserve {
+.smsPageBody ul li.reverse {
     flex-direction: row-reverse;
     margin-right: 0px;
 }
