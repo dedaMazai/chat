@@ -226,3 +226,22 @@
 .smsPageFooter button:active {
     background: #80c4ab;
 }
+
+.hide {
+   display: none;
+}
+
+.Hello {
+    background-color: #C9FDEA;
+    width: 100%;
+}
+
+.Hello >p {
+    margin: 0px;
+    text-align: center;
+}
+
+.Hello >h2 {
+    margin-bottom: 0px;
+    text-align: center;
+}

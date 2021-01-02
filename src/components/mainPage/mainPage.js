@@ -9,6 +9,7 @@ function MainPage () {
     const auth = useContext(AuthContext);
     const {loading, request} = useHttp();
     const ref = React.createRef();
+    const block = React.createRef();
 
     const [form, setForm] = useState({
         email: '',
@@ -79,21 +80,22 @@ function MainPage () {
         setForm({ ...form, smsInput: event.target.value })
     };
 
-    // useEffect(() => {
-    //     const data = JSON.parse(localStorage.getItem('userData'));
-    //     console.log(data)});
-    //   setInterval(() => {
-    //     takeAllPerson();
-    //     console.log(1)
-    // }, 5000);
+    useEffect( () => {
+        takeAllPerson();
+    }, []);
 
-    // let timerAllPerson = setInterval(() => {
+    const person = (data) => {
+        takePerson(data);
+        block.current.scrollTop = 99999999999;
+    };
+
+    // let timer = setInterval(() => {
     //     takeAllPerson();
-    //     takePerson();
-    //     console.log(1)
-    // }, 10000);
-    // takeAllPerson();
-    // console.log(form.smsTake);
+    //     takePerson(localStorage.login);
+    // }, 1000);
+    // if (localStorage.login === null || localStorage.login === undefined || localStorage.login === "") {
+    //     clearInterval(timer)
+    // }
 
     return (
         <>
@@ -109,13 +111,24 @@ function MainPage () {
                 <div className="contactPage">
                     <ul>
                         {form.logins.map(data => (
-                            <li onClick={()=>takePerson(data)}>
+                            <li onClick={()=>person(data)}>
                                 {data}
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="smsPage">
+                <div className = {
+                    form.loginTo === null ||
+                    form.loginTo === undefined ||
+                    form.loginTo === ""? "Hello" : "hide"
+                    }>
+                        <h2>Приветствую вас в корпоративном чате.</h2>
+                        <p>Если не отображается список участников обновите страницу.</p>
+                </div>
+                <div className = {
+                    form.loginTo === null ||
+                    form.loginTo === undefined ||
+                    form.loginTo === ""? "hide" : "smsPage"}>
                     <div className="smsPageHeader">
                         <h2> {form.info} | {form.posit}</h2>
                         <div>
@@ -123,7 +136,7 @@ function MainPage () {
                             <p>Почта: {form.email}</p>
                         </div>
                     </div>
-                    <div className="smsPageBody" onClick={()=>takeAllPerson()}>
+                    <div className="smsPageBody"  ref={block}>
                         <ul>
                             {form.smsAll.map(data => (
                                 <li className = {data.reverse} >
